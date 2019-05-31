@@ -21,6 +21,7 @@ public class School {
 
     public void addTeacher(Teacher newTeacher) {
         teachers.add(newTeacher);
+        System.out.println("Teacher added");
     }
 
     public void deleteTeacher(int id) {
@@ -54,6 +55,7 @@ public class School {
 
     public void addStudent(Student newStudent) {
         students.add(newStudent);
+        System.out.println("Student added");
     }
 
     public void deleteStudent(int id) {

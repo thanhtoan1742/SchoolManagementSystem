@@ -1,0 +1,4 @@
+add student <id> <name without spaces> <grade> <className>
+add student <id> <name without spaces> <grade> <className> <paidFee>
+add student <id> <name without spaces> <grade> <className> <fee> <paidFee>
+add teacher <id> <name without spaces> <profession> <salary>

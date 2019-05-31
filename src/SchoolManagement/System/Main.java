@@ -11,6 +11,7 @@ public class Main {
         CBL.addStudent(new Student(0, "Nguyen Thanh Toan", 12, "TT4"));
         CBL.addStudent(new Student(1, "Nguyen Ngoc Khoi Nuyen", 12, "T4"));
 
-        CBL.searchStudentbyName("Nguyen Thanh Toan");
+        CBL.searchStudentByName("Nguyen Thanh Toan");
+        CBL.searchTeacherByName("Pham Cong Tham");
     }
 }

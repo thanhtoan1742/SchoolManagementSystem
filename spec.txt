@@ -1,0 +1,26 @@
+School Management System :
+	-Students.
+	-Teachers.
+	-Money.
+
+ Money:
+ 	-fee students have to pay.
+	-fee already paid.
+	-teacher slary.
+	-total money earned.
+	-total money spent.
+
+Student:
+	-id.
+	-name.
+	-grade.
+	-className.
+	-fee total.
+	-fee paid.
+
+Teacher:
+	-id.
+	-name.
+	-profession.
+	-salarty.
+

@@ -77,16 +77,29 @@ public class CLI {
 
             ArrayList<Teacher> teachers = CBL.getTeachers();
             fo.printf("%d%n", teachers.size());
-            for (int i = 0; i < teachers.size(); i++) {
-                //fo.printf("%-10d%-30s%-10s%-15d", teachers.get(i).getId(), teachers.get(i).getName(), teachers.get(i).getProfession(), teachers.get(i).getSalary());
-            }
+            for (int i = 0; i < teachers.size(); i++)
+                fo.printf("%-5d%-25s%-10s%-15d%n", teachers.get(i).getId(),
+                        teachers.get(i).getName(), teachers.get(i).getProfession(),
+                        teachers.get(i).getSalary());
 
+            ArrayList<Student> students = CBL.getStudents();
+            fo.printf("%d%n", students.size());
+            for (int i = 0; i < students.size(); i++)
+                fo.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
+                        students.get(i).getGrade(), students.get(i).getClassName(),
+                        students.get(i).getFee(), students.get(i).getPaidFee());
+
+            fo.close();
         }
         catch (IOException e) {
             log("File Not Found");
         }
 
         log("Data exported to data.txt");
+    }
+
+    private void importData() {
+        
     }
 
     private void logAddStudentHelp() {

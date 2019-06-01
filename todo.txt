@@ -1,0 +1,6 @@
+Write help file properly.
+Add pay command.
+	- pay student <money>.
+	- pay teacher <money>.
+add change teacher salary command.
+

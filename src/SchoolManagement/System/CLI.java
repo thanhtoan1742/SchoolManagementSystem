@@ -12,6 +12,8 @@ public class CLI {
     private static final String CMD_IMPORT = "import";
     private static final String CMD_ADD = "add";
     private static final String CMD_PRINT_DATA = "printdata";
+    private static final String CMD_SEARCH = "pay";
+    private static final String CMD_PAY = "search";
     private static final String ARG_TEACHER = "teacher";
     private static final String ARG_STUDENT = "student";
     private static final String DATA_FILE = "data.txt";
@@ -45,6 +47,13 @@ public class CLI {
             if (cmdArr[0].equals(CMD_EXPORT)) exportData();
             if (cmdArr[0].equals(CMD_IMPORT)) importData();
             if (cmdArr[0].equals(CMD_PRINT_DATA)) printData();
+            if (cmdArr[0].equals(CMD_SEARCH))
+                if (cmdArr.length == 1) {
+                    logSearchStudentHelp();
+                    logSearchTeacherHelp();
+                }
+                else if (cmdArr[1].equals(ARG_STUDENT)) searchStudent(cmdArr);
+                else if (cmdArr[1].equals(ARG_TEACHER)) searchTeacher(cmdArr);
         }
     }
 
@@ -184,6 +193,14 @@ public class CLI {
         log("Syntax: add teacher <id> <name without spaces> <profession> <salary>");
     }
 
+    private void logSearchStudentHelp() {
+        log("Syntax: search student <name without spaces>");
+    }
+
+    private void logSearchTeacherHelp() {
+        log("Syntax: search teacher <name without spaces>");
+    }
+
     private void printData() {
         ArrayList<Teacher> teachers = CBL.getTeachers();
         System.out.printf("%d%n", teachers.size());
@@ -198,6 +215,44 @@ public class CLI {
             System.out.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
                     students.get(i).getGrade(), students.get(i).getClassName(),
                     students.get(i).getFee(), students.get(i).getPaidFee());
+    }
+
+    /**
+     * Search student by name then print out all information about
+     * all students have the same name.
+     */
+    private void searchStudent(String[] cmdArr) {
+        if (cmdArr.length < 3) {
+            logSearchStudentHelp();
+            return;
+        }
+        String name = cmdArr[2];
+
+        ArrayList<Student> students = CBL.getStudents();
+        for (int i = 0; i < students.size(); i++)
+            if (name.equals(students.get(i).getName()))
+                System.out.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
+                    students.get(i).getGrade(), students.get(i).getClassName(),
+                    students.get(i).getFee(), students.get(i).getPaidFee());
+    }
+
+    /**
+     * Search teacher by name then print out all information about
+     * all students have the same name.
+     */
+    private void searchTeacher(String[] cmdArr) {
+        if (cmdArr.length < 3) {
+            logSearchTeacherHelp();
+            return;
+        }
+        String name = cmdArr[2];
+
+        ArrayList<Teacher> teachers = CBL.getTeachers();
+        for (int i = 0; i < teachers.size(); i++)
+            if (name.equals(teachers.get(i).getName()))
+                System.out.printf("%-5d%-25s%-10s%-15d%n", teachers.get(i).getId(),
+                    teachers.get(i).getName(), teachers.get(i).getProfession(),
+                    teachers.get(i).getSalary());
     }
 
     public static void main(String[] args) {

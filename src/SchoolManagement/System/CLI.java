@@ -11,6 +11,7 @@ public class CLI {
     private static final String CMD_EXPORT = "export";
     private static final String CMD_IMPORT = "import";
     private static final String CMD_ADD = "add";
+    private static final String CMD_PRINT_DATA = "printdata";
     private static final String ARG_TEACHER = "teacher";
     private static final String ARG_STUDENT = "student";
     private static final String DATA_FILE = "data.txt";
@@ -43,6 +44,7 @@ public class CLI {
 
             if (cmdArr[0].equals(CMD_EXPORT)) exportData();
             if (cmdArr[0].equals(CMD_IMPORT)) importData();
+            if (cmdArr[0].equals(CMD_PRINT_DATA)) printData();
         }
     }
 
@@ -129,16 +131,20 @@ public class CLI {
             log("File Not Found");
         }
 
-        log("Data exported to data.txt");
+        log("Data exported to " + DATA_FILE);
     }
 
     /**
      * Import data from DATA_FILE.
      */
-    private void importData() {
-        BufferedReader reader = Files.newBufferedReader(Paths.get(DATA_FILE));
+    private void importData() throws IOException {
+        File file = new File(DATA_FILE);
+        Scanner scanner = new Scanner(file);
 
-        int n = reader.nextInt();
+        /**
+         * Read teacher's data first.
+         */
+        int n = scanner.nextInt();
         while (n > 0) {
             n--;
             int id = scanner.nextInt();
@@ -149,6 +155,9 @@ public class CLI {
             CBL.getTeachers().add(new Teacher(id, name, profession, salary));
         }
 
+        /**
+         * Read student's data.
+         */
         n = scanner.nextInt();
         while (n > 0) {
             n--;
@@ -161,6 +170,8 @@ public class CLI {
 
             CBL.getStudents().add(new Student(id, name, grade, className, fee, paidFee));
         }
+
+        log("Data Imported from " + DATA_FILE);
     }
 
     private void logAddStudentHelp() {
@@ -171,6 +182,22 @@ public class CLI {
 
     private void logAddTeacherHelp() {
         log("Syntax: add teacher <id> <name without spaces> <profession> <salary>");
+    }
+
+    private void printData() {
+        ArrayList<Teacher> teachers = CBL.getTeachers();
+        System.out.printf("%d%n", teachers.size());
+        for (int i = 0; i < teachers.size(); i++)
+            System.out.printf("%-5d%-25s%-10s%-15d%n", teachers.get(i).getId(),
+                    teachers.get(i).getName(), teachers.get(i).getProfession(),
+                    teachers.get(i).getSalary());
+
+        ArrayList<Student> students = CBL.getStudents();
+        System.out.printf("%d%n", students.size());
+        for (int i = 0; i < students.size(); i++)
+            System.out.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
+                    students.get(i).getGrade(), students.get(i).getClassName(),
+                    students.get(i).getFee(), students.get(i).getPaidFee());
     }
 
     public static void main(String[] args) {

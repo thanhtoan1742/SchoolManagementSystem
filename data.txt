@@ -4,4 +4,4 @@
 3
 0         NguyenThanhToan          12        TT4       12000000       0              
 1         NguyenNgocKhoiNguyen     12        TT4       12000000       5000000        
-2         PhanDoanThaiBing         11        D5        6000000        3000000        
+2         PhanDoanThaiBinh         11        D5        6000000        3000000        

@@ -1,16 +1,19 @@
 package SchoolManagement.System;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CLI {
     private static final String HEADER = "SMS>";
     private static final String CMD_QUIT = "exit";
     private static final String CMD_EXPORT = "export";
+    private static final String CMD_IMPORT = "import";
     private static final String CMD_ADD = "add";
     private static final String ARG_TEACHER = "teacher";
     private static final String ARG_STUDENT = "student";
-    private static final String OUTPUT_FILE = "data.txt";
+    private static final String DATA_FILE = "data.txt";
 
     public School CBL = new School();
 
@@ -22,59 +25,84 @@ public class CLI {
         String cmd = "";
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        while (!cmd.equals(CMD_QUIT)) {
+        while (true) {
             System.out.print(HEADER);
             cmd = reader.readLine();
             String[] cmdArr = cmd.split(" ");
-
             if (cmdArr.length == 0) continue;
 
-            if (cmdArr[0].equals(CMD_ADD)) {
+            if (cmdArr[0].equals(CMD_QUIT)) break;
+
+            if (cmdArr[0].equals(CMD_ADD))
                 if (cmdArr.length == 1) {
                     logAddStudentHelp();
                     logAddTeacherHelp();
-                } else if (cmdArr[1].equals(ARG_STUDENT)) {
-                    if (cmdArr.length < 6)
-                        logAddStudentHelp();
-                    else {
-                        int id = Integer.parseInt(cmdArr[2]);
-                        String name = cmdArr[3];
-                        int grade = Integer.parseInt(cmdArr[4]);
-                        String className = cmdArr[5];
-
-                        if (cmdArr.length == 6) CBL.addStudent(new Student(id, name, grade, className));
-                        else if (cmdArr.length == 7) {
-                            int paidFee = Integer.parseInt(cmdArr[6]);
-                            CBL.addStudent(new Student(id, name, grade, className, paidFee));
-                        } else {
-                            int fee = Integer.parseInt(cmdArr[6]);
-                            int paidFee = Integer.parseInt(cmdArr[7]);
-                            CBL.addStudent(new Student(id, name, grade, className, fee, paidFee));
-
-                        }
-                    }
-                } else if (cmdArr[1].equals(ARG_TEACHER)) {
-                    if (cmdArr.length < 6)
-                        logAddTeacherHelp();
-                    else {
-                        int id = Integer.parseInt(cmdArr[2]);
-                        String name = cmdArr[3];
-                        String profession = cmdArr[4];
-                        int salary = Integer.parseInt(cmdArr[5]);
-
-                        CBL.addTeacher(new Teacher(id, name, profession, salary));
-                    }
                 }
-            }
-            else if (cmdArr[0].equals(CMD_EXPORT))
-                exportData();
+                else if (cmdArr[1].equals(ARG_STUDENT)) addStudent(cmdArr);
+                else if (cmdArr[1].equals(ARG_TEACHER)) addTeacher(cmdArr);
+
+            if (cmdArr[0].equals(CMD_EXPORT)) exportData();
+            if (cmdArr[0].equals(CMD_IMPORT)) importData();
         }
     }
 
+    /**
+     * Parse and add new student to database.
+     */
+    private void addStudent(String[] cmdArr) {
+        if (cmdArr.length < 6) {
+            logAddStudentHelp();
+            return;
+        }
+
+        int id = Integer.parseInt(cmdArr[2]);
+        String name = cmdArr[3];
+        int grade = Integer.parseInt(cmdArr[4]);
+        String className = cmdArr[5];
+
+        if (cmdArr.length == 6) CBL.addStudent(new Student(id, name, grade, className));
+        if (cmdArr.length == 7) {
+            int paidFee = Integer.parseInt(cmdArr[6]);
+            CBL.addStudent(new Student(id, name, grade, className, paidFee));
+        }
+        if (cmdArr.length == 8) {
+            int fee = Integer.parseInt(cmdArr[6]);
+            int paidFee = Integer.parseInt(cmdArr[7]);
+            CBL.addStudent(new Student(id, name, grade, className, fee, paidFee));
+        }
+    }
+
+    /**
+     * Parse and add new teacher to database.
+     */
+    private void addTeacher(String[] cmdArr) {
+        if (cmdArr.length < 6) {
+            logAddTeacherHelp();
+            return;
+        }
+
+        int id = Integer.parseInt(cmdArr[2]);
+        String name = cmdArr[3];
+        String profession = cmdArr[4];
+        int salary = Integer.parseInt(cmdArr[5]);
+
+        CBL.addTeacher(new Teacher(id, name, profession, salary));
+    }
+
+    /**
+     * Data is exported to DATA_FILE.
+     * This data also serves as database.
+     */
     private void exportData() {
         try {
-            PrintWriter fo = new PrintWriter(OUTPUT_FILE);
+            PrintWriter fo = new PrintWriter(DATA_FILE);
 
+            /**
+             * Print teacher's data first.
+             * First line is the number of teachers.
+             * Second line and so on are teachers.
+             * Format: ID NAME PROFESSION SALARY.
+             */
             ArrayList<Teacher> teachers = CBL.getTeachers();
             fo.printf("%d%n", teachers.size());
             for (int i = 0; i < teachers.size(); i++)
@@ -82,6 +110,12 @@ public class CLI {
                         teachers.get(i).getName(), teachers.get(i).getProfession(),
                         teachers.get(i).getSalary());
 
+            /**
+             * Next is student's data.
+             * First line is the number of students.
+             * second line and so on are students.
+             * FORMAT: ID NAME GRADE CLASSNAME FEE PAIDFEE.
+             */
             ArrayList<Student> students = CBL.getStudents();
             fo.printf("%d%n", students.size());
             for (int i = 0; i < students.size(); i++)
@@ -98,8 +132,35 @@ public class CLI {
         log("Data exported to data.txt");
     }
 
+    /**
+     * Import data from DATA_FILE.
+     */
     private void importData() {
-        
+        BufferedReader reader = Files.newBufferedReader(Paths.get(DATA_FILE));
+
+        int n = reader.nextInt();
+        while (n > 0) {
+            n--;
+            int id = scanner.nextInt();
+            String name = scanner.next();
+            String profession = scanner.next();
+            int salary = scanner.nextInt();
+
+            CBL.getTeachers().add(new Teacher(id, name, profession, salary));
+        }
+
+        n = scanner.nextInt();
+        while (n > 0) {
+            n--;
+            int id = scanner.nextInt();
+            String name = scanner.next();
+            int grade = scanner.nextInt();
+            String className = scanner.next();
+            int fee = scanner.nextInt();
+            int paidFee = scanner.nextInt();
+
+            CBL.getStudents().add(new Student(id, name, grade, className, fee, paidFee));
+        }
     }
 
     private void logAddStudentHelp() {

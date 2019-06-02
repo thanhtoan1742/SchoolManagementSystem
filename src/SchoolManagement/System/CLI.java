@@ -23,7 +23,7 @@ public class CLI {
 
     public School CBL = new School();
 
-    private void print(String s) {
+    private static void print(String s) {
         System.out.println(s);
     }
 
@@ -324,37 +324,37 @@ public class CLI {
     }
 
     private void printAddStudentHelp() {
-        print("Syntax: " + CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className>");
-        print("Syntax: " + CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className> <paidFee>");
-        print("Syntax: " + CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className> <fee> <paidFee>");
+        print(CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className>");
+        print(CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className> <paidFee>");
+        print(CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className> <fee> <paidFee>");
     }
 
     private void printAddTeacherHelp() {
-        print("Syntax: " + CMD_ADD + " " + ARG_TEACHER + " <id> <name without spaces> <profession> <salary>");
+        print(CMD_ADD + " " + ARG_TEACHER + " <id> <name without spaces> <profession> <salary>");
     }
 
     private void printSearchStudentHelp() {
-        print("Syntax: " + CMD_SEARCH + " " + ARG_STUDENT + " <name without spaces>");
+        print(CMD_SEARCH + " " + ARG_STUDENT + " <name without spaces>");
     }
 
     private void printSearchTeacherHelp() {
-        print("Syntax: " + CMD_SEARCH + " " + ARG_TEACHER + " <name without spaces>");
+        print(CMD_SEARCH + " " + ARG_TEACHER + " <name without spaces>");
     }
 
     private void printRemoveStudentHelp() {
-        print("Syntax: " + CMD_REMOVE + " " + ARG_STUDENT + " <id>");
+        print(CMD_REMOVE + " " + ARG_STUDENT + " <id>");
     }
 
     private void printRemoveTeacherHelp() {
-        print("Syntax: " + CMD_REMOVE + " " + ARG_TEACHER + " <id>");
+        print(CMD_REMOVE + " " + ARG_TEACHER + " <id>");
     }
 
     private void printPayStudentHelp() {
-        print("Syntax: " + CMD_PAY + " <student id> <money to pay>");
+        print(CMD_PAY + " <student id> <money to pay>");
     }
 
     private void printSetTeacherSalaryHelp() {
-        print("Syntax: " + CMD_SET_SALARY + " <teacher id> <new salary>");
+        print(CMD_SET_SALARY + " <teacher id> <new salary>");
     }
 
     private void printAllHelp() {
@@ -376,6 +376,7 @@ public class CLI {
     public static void main(String[] args) {
         CLI cli = new CLI();
         try {
+            print("Type help for commands you can use.");
             cli.start();
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,4 +1,15 @@
+help
+import
+export
 add student <id> <name without spaces> <grade> <className>
 add student <id> <name without spaces> <grade> <className> <paidFee>
 add student <id> <name without spaces> <grade> <className> <fee> <paidFee>
 add teacher <id> <name without spaces> <profession> <salary>
+remove student <id>
+remove teacher <id>
+search student <name without spaces>
+search teacher <name without spaces>
+pay <student id> <money to pay>
+setsalary <teacher id> <new salary>
+printdata
+exit

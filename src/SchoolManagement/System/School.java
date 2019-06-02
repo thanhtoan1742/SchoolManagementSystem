@@ -21,6 +21,7 @@ public class School {
 
     public void addTeacher(Teacher newTeacher) {
         teachers.add(newTeacher);
+        totalMoneyPaid += newTeacher.getSalary();
     }
 
     public void removeTeacher(int id) {
@@ -54,6 +55,7 @@ public class School {
 
     public void addStudent(Student newStudent) {
         students.add(newStudent);
+        totalMoneyEarned += newStudent.getPaidFee();
     }
 
     public void removeStudent(int id) {

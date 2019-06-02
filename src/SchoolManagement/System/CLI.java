@@ -280,7 +280,7 @@ public class CLI {
             String profession = scanner.next();
             int salary = scanner.nextInt();
 
-            CBL.getTeachers().add(new Teacher(id, name, profession, salary));
+            CBL.addTeacher(new Teacher(id, name, profession, salary));
         }
 
         /**
@@ -296,7 +296,7 @@ public class CLI {
             int fee = scanner.nextInt();
             int paidFee = scanner.nextInt();
 
-            CBL.getStudents().add(new Student(id, name, grade, className, fee, paidFee));
+            CBL.addStudent(new Student(id, name, grade, className, fee, paidFee));
         }
 
         print("Data Imported from " + DATA_FILE);
@@ -319,6 +319,8 @@ public class CLI {
             System.out.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
                     students.get(i).getGrade(), students.get(i).getClassName(),
                     students.get(i).getFee(), students.get(i).getPaidFee());
+
+        System.out.printf("%-15d%-15d%-15d%n", CBL.getTotalMoneyEarned(), CBL.getTotalMoneyPaid(), CBL.getTotalMoneyLeft());
     }
 
     private void printAddStudentHelp() {

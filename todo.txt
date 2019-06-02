@@ -2,4 +2,3 @@ make all help with argument to be printed if the argument is incorrect.
 	- search noone
 	-> logSearchTeacherHelp.
 	-> logSearchStudentHelp.
-add print money left.

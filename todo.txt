@@ -1,9 +1,5 @@
-write help file properly.
-add pay command.
-	- pay student <money>.
-	- pay teacher <money>.
-add change teacher salary command.
 make all help with argument to be printed if the argument is incorrect.
 	- search noone
 	-> logSearchTeacherHelp.
 	-> logSearchStudentHelp.
+add print money left.

@@ -21,10 +21,9 @@ public class School {
 
     public void addTeacher(Teacher newTeacher) {
         teachers.add(newTeacher);
-        System.out.println("Teacher added");
     }
 
-    public void deleteTeacher(int id) {
+    public void removeTeacher(int id) {
         for (int i = 0; i < teachers.size(); i++)
             if (teachers.get(i).getId() == id) {
                 totalMoneyPaid -= teachers.get(i).getSalary();
@@ -55,10 +54,9 @@ public class School {
 
     public void addStudent(Student newStudent) {
         students.add(newStudent);
-        System.out.println("Student added");
     }
 
-    public void deleteStudent(int id) {
+    public void removeStudent(int id) {
         for (int i = 0; i < students.size(); i++)
             if (students.get(i).getId() == id) {
                 totalMoneyEarned -= students.get(i).getPaidFee();

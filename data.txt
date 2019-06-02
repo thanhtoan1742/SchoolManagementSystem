@@ -1,7 +1,8 @@
 2
-0         TrinhVanSon              Math      12000000       
-1         PhamCongTham             Physics   11000000       
-3
-0         NguyenThanhToan          12        TT4       12000000       0              
-1         NguyenNgocKhoiNguyen     12        TT4       12000000       5000000        
-2         PhanDoanThaiBinh         11        D5        6000000        3000000        
+0    TrinhVanSon              Math      13000000       
+1    PhamCongTham             Physics   11000000       
+4
+0    NguyenThanhToan          12        TT4       12000000       500000         
+1    NguyenNgocKhoiNguyen     12        TT4       12000000       5000000        
+2    PhanDoanThaiBinh         11        D5        6000000        3000000        
+3    NguyenDuyHuy             10        A6        10000000       1000000        

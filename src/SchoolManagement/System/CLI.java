@@ -12,8 +12,10 @@ public class CLI {
     private static final String CMD_IMPORT = "import";
     private static final String CMD_ADD = "add";
     private static final String CMD_PRINT_DATA = "printdata";
-    private static final String CMD_SEARCH = "pay";
-    private static final String CMD_PAY = "search";
+    private static final String CMD_SEARCH = "search";
+    private static final String CMD_SET_SALARY = "setsalary";
+    private static final String CMD_PAY = "pay";
+    private static final String CMD_REMOVE = "remove";
     private static final String ARG_TEACHER = "teacher";
     private static final String ARG_STUDENT = "student";
     private static final String DATA_FILE = "data.txt";
@@ -44,16 +46,31 @@ public class CLI {
                 else if (cmdArr[1].equals(ARG_STUDENT)) addStudent(cmdArr);
                 else if (cmdArr[1].equals(ARG_TEACHER)) addTeacher(cmdArr);
 
-            if (cmdArr[0].equals(CMD_EXPORT)) exportData();
-            if (cmdArr[0].equals(CMD_IMPORT)) importData();
-            if (cmdArr[0].equals(CMD_PRINT_DATA)) printData();
             if (cmdArr[0].equals(CMD_SEARCH))
                 if (cmdArr.length == 1) {
-                    logSearchStudentHelp();
-                    logSearchTeacherHelp();
+
+                logSearchStudentHelp();
+                logSearchTeacherHelp();
                 }
                 else if (cmdArr[1].equals(ARG_STUDENT)) searchStudent(cmdArr);
                 else if (cmdArr[1].equals(ARG_TEACHER)) searchTeacher(cmdArr);
+
+            if (cmdArr.length == 1) {
+            }
+
+            if (cmdArr[0].equals(CMD_REMOVE))
+                if (cmdArr.length == 1) {
+                    logRemoveStudentHelp();
+                    logRemoveTeacherHelp();
+                }
+                else if (cmdArr[1].equals(ARG_STUDENT)) removeStudent(cmdArr);
+                else if (cmdArr[1].equals(ARG_TEACHER)) removeTeacher(cmdArr);
+
+            if (cmdArr[0].equals(CMD_EXPORT)) exportData();
+            if (cmdArr[0].equals(CMD_IMPORT)) importData();
+            if (cmdArr[0].equals(CMD_PRINT_DATA)) printData();
+            if (cmdArr[0].equals(CMD_PAY)) payStudent(cmdArr);
+            if (cmdArr[0].equals(CMD_SET_SALARY)) setTeacherSalary(cmdArr);
         }
     }
 
@@ -81,6 +98,7 @@ public class CLI {
             int paidFee = Integer.parseInt(cmdArr[7]);
             CBL.addStudent(new Student(id, name, grade, className, fee, paidFee));
         }
+        System.out.println("Student added");
     }
 
     /**
@@ -98,6 +116,105 @@ public class CLI {
         int salary = Integer.parseInt(cmdArr[5]);
 
         CBL.addTeacher(new Teacher(id, name, profession, salary));
+        System.out.println("Teacher added");
+    }
+
+    /**
+     * Search student by name then print out all information about
+     * all students have the same name.
+     */
+    private void searchStudent(String[] cmdArr) {
+        if (cmdArr.length < 3) {
+            logSearchStudentHelp();
+            return;
+        }
+        String name = cmdArr[2];
+
+        ArrayList<Student> students = CBL.getStudents();
+        for (int i = 0; i < students.size(); i++)
+            if (name.equals(students.get(i).getName()))
+                System.out.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
+                        students.get(i).getGrade(), students.get(i).getClassName(),
+                        students.get(i).getFee(), students.get(i).getPaidFee());
+    }
+
+    /**
+     * Search teacher by name then print out all information about
+     * all students have the same name.
+     */
+    private void searchTeacher(String[] cmdArr) {
+        if (cmdArr.length < 3) {
+            logSearchTeacherHelp();
+            return;
+        }
+        String name = cmdArr[2];
+
+        ArrayList<Teacher> teachers = CBL.getTeachers();
+        for (int i = 0; i < teachers.size(); i++)
+            if (name.equals(teachers.get(i).getName()))
+                System.out.printf("%-5d%-25s%-10s%-15d%n", teachers.get(i).getId(),
+                        teachers.get(i).getName(), teachers.get(i).getProfession(),
+                        teachers.get(i).getSalary());
+    }
+
+    /**
+     * Remove student with id from database.
+     */
+    private void removeStudent(String[] cmdArr) {
+        if (cmdArr.length < 3) {
+            logRemoveStudentHelp();
+            return;
+        }
+
+        int id = Integer.parseInt(cmdArr[2]);
+        CBL.removeStudent(id);
+        log("Student with id " + Integer.toString(id) +" has been removed");
+    }
+
+    /**
+     * Remove teacher with id from database.
+     */
+    private void removeTeacher(String[] cmdArr) {
+        if (cmdArr.length < 3) {
+            logRemoveTeacherHelp();
+            return;
+        }
+
+        int id = Integer.parseInt(cmdArr[2]);
+        CBL.removeTeacher(id);
+        log("Teacher with id " + Integer.toString(id) +" has been removed");
+    }
+
+    /**
+     * Get paid money of student to database.
+     */
+    private void payStudent(String[] cmdArr) {
+        if (cmdArr.length < 3) {
+            logPayStudentHelp();
+            return;
+        }
+
+        int id = Integer.parseInt(cmdArr[1]);
+        int fee = Integer.parseInt(cmdArr[2]);
+
+        CBL.addStudentPaidFee(id, fee);
+        log("Student with id " + Integer.toString(id) + " has paid " + Integer.toString(fee));
+    }
+
+    /**
+     * Change teacher's salary.
+     */
+    private void setTeacherSalary(String[] cmdArr) {
+        if (cmdArr.length < 3) {
+            logSetTeacherSalaryHelp();
+            return;
+        }
+
+        int id = Integer.parseInt(cmdArr[1]);
+        int newSalary = Integer.parseInt(cmdArr[2]);
+
+        CBL.setTeacherSalary(id, newSalary);
+        log("Teacher with id " + Integer.toString(id) + " 's salary has been set to " + Integer.toString(newSalary));
     }
 
     /**
@@ -183,6 +300,25 @@ public class CLI {
         log("Data Imported from " + DATA_FILE);
     }
 
+    /**
+     * Print all data to the console.
+     */
+    private void printData() {
+        ArrayList<Teacher> teachers = CBL.getTeachers();
+        System.out.printf("%d%n", teachers.size());
+        for (int i = 0; i < teachers.size(); i++)
+            System.out.printf("%-5d%-25s%-10s%-15d%n", teachers.get(i).getId(),
+                    teachers.get(i).getName(), teachers.get(i).getProfession(),
+                    teachers.get(i).getSalary());
+
+        ArrayList<Student> students = CBL.getStudents();
+        System.out.printf("%d%n", students.size());
+        for (int i = 0; i < students.size(); i++)
+            System.out.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
+                    students.get(i).getGrade(), students.get(i).getClassName(),
+                    students.get(i).getFee(), students.get(i).getPaidFee());
+    }
+
     private void logAddStudentHelp() {
         log("Syntax: add student <id> <name without spaces> <grade> <className>");
         log("Syntax: add student <id> <name without spaces> <grade> <className> <paidFee>");
@@ -201,58 +337,20 @@ public class CLI {
         log("Syntax: search teacher <name without spaces>");
     }
 
-    private void printData() {
-        ArrayList<Teacher> teachers = CBL.getTeachers();
-        System.out.printf("%d%n", teachers.size());
-        for (int i = 0; i < teachers.size(); i++)
-            System.out.printf("%-5d%-25s%-10s%-15d%n", teachers.get(i).getId(),
-                    teachers.get(i).getName(), teachers.get(i).getProfession(),
-                    teachers.get(i).getSalary());
-
-        ArrayList<Student> students = CBL.getStudents();
-        System.out.printf("%d%n", students.size());
-        for (int i = 0; i < students.size(); i++)
-            System.out.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
-                    students.get(i).getGrade(), students.get(i).getClassName(),
-                    students.get(i).getFee(), students.get(i).getPaidFee());
+    private void logRemoveStudentHelp() {
+        log("Syntax: remove student <id>");
     }
 
-    /**
-     * Search student by name then print out all information about
-     * all students have the same name.
-     */
-    private void searchStudent(String[] cmdArr) {
-        if (cmdArr.length < 3) {
-            logSearchStudentHelp();
-            return;
-        }
-        String name = cmdArr[2];
-
-        ArrayList<Student> students = CBL.getStudents();
-        for (int i = 0; i < students.size(); i++)
-            if (name.equals(students.get(i).getName()))
-                System.out.printf("%-5d%-25s%-10d%-10s%-15d%-15d%n", students.get(i).getId(), students.get(i).getName(),
-                    students.get(i).getGrade(), students.get(i).getClassName(),
-                    students.get(i).getFee(), students.get(i).getPaidFee());
+    private void logRemoveTeacherHelp() {
+        log("Syntax: remove teacher <id>");
     }
 
-    /**
-     * Search teacher by name then print out all information about
-     * all students have the same name.
-     */
-    private void searchTeacher(String[] cmdArr) {
-        if (cmdArr.length < 3) {
-            logSearchTeacherHelp();
-            return;
-        }
-        String name = cmdArr[2];
+    private void logPayStudentHelp() {
+        log("Syntax: pay <student id> <money to pay>");
+    }
 
-        ArrayList<Teacher> teachers = CBL.getTeachers();
-        for (int i = 0; i < teachers.size(); i++)
-            if (name.equals(teachers.get(i).getName()))
-                System.out.printf("%-5d%-25s%-10s%-15d%n", teachers.get(i).getId(),
-                    teachers.get(i).getName(), teachers.get(i).getProfession(),
-                    teachers.get(i).getSalary());
+    private void logSetTeacherSalaryHelp() {
+        log("Syntax: setsalary <teacher id> <new salary>");
     }
 
     public static void main(String[] args) {

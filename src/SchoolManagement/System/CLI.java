@@ -16,13 +16,14 @@ public class CLI {
     private static final String CMD_SET_SALARY = "setsalary";
     private static final String CMD_PAY = "pay";
     private static final String CMD_REMOVE = "remove";
+    private static final String CMD_HELP = "help";
     private static final String ARG_TEACHER = "teacher";
     private static final String ARG_STUDENT = "student";
     private static final String DATA_FILE = "data.txt";
 
     public School CBL = new School();
 
-    private void log(String s) {
+    private void print(String s) {
         System.out.println(s);
     }
 
@@ -40,8 +41,8 @@ public class CLI {
 
             if (cmdArr[0].equals(CMD_ADD))
                 if (cmdArr.length == 1) {
-                    logAddStudentHelp();
-                    logAddTeacherHelp();
+                    printAddStudentHelp();
+                    printAddTeacherHelp();
                 }
                 else if (cmdArr[1].equals(ARG_STUDENT)) addStudent(cmdArr);
                 else if (cmdArr[1].equals(ARG_TEACHER)) addTeacher(cmdArr);
@@ -49,8 +50,8 @@ public class CLI {
             if (cmdArr[0].equals(CMD_SEARCH))
                 if (cmdArr.length == 1) {
 
-                logSearchStudentHelp();
-                logSearchTeacherHelp();
+                printSearchStudentHelp();
+                printSearchTeacherHelp();
                 }
                 else if (cmdArr[1].equals(ARG_STUDENT)) searchStudent(cmdArr);
                 else if (cmdArr[1].equals(ARG_TEACHER)) searchTeacher(cmdArr);
@@ -60,8 +61,8 @@ public class CLI {
 
             if (cmdArr[0].equals(CMD_REMOVE))
                 if (cmdArr.length == 1) {
-                    logRemoveStudentHelp();
-                    logRemoveTeacherHelp();
+                    printRemoveStudentHelp();
+                    printRemoveTeacherHelp();
                 }
                 else if (cmdArr[1].equals(ARG_STUDENT)) removeStudent(cmdArr);
                 else if (cmdArr[1].equals(ARG_TEACHER)) removeTeacher(cmdArr);
@@ -71,6 +72,7 @@ public class CLI {
             if (cmdArr[0].equals(CMD_PRINT_DATA)) printData();
             if (cmdArr[0].equals(CMD_PAY)) payStudent(cmdArr);
             if (cmdArr[0].equals(CMD_SET_SALARY)) setTeacherSalary(cmdArr);
+            if (cmdArr[0].equals(CMD_HELP)) printAllHelp();
         }
     }
 
@@ -79,7 +81,7 @@ public class CLI {
      */
     private void addStudent(String[] cmdArr) {
         if (cmdArr.length < 6) {
-            logAddStudentHelp();
+            printAddStudentHelp();
             return;
         }
 
@@ -106,7 +108,7 @@ public class CLI {
      */
     private void addTeacher(String[] cmdArr) {
         if (cmdArr.length < 6) {
-            logAddTeacherHelp();
+            printAddTeacherHelp();
             return;
         }
 
@@ -125,7 +127,7 @@ public class CLI {
      */
     private void searchStudent(String[] cmdArr) {
         if (cmdArr.length < 3) {
-            logSearchStudentHelp();
+            printSearchStudentHelp();
             return;
         }
         String name = cmdArr[2];
@@ -144,7 +146,7 @@ public class CLI {
      */
     private void searchTeacher(String[] cmdArr) {
         if (cmdArr.length < 3) {
-            logSearchTeacherHelp();
+            printSearchTeacherHelp();
             return;
         }
         String name = cmdArr[2];
@@ -162,13 +164,13 @@ public class CLI {
      */
     private void removeStudent(String[] cmdArr) {
         if (cmdArr.length < 3) {
-            logRemoveStudentHelp();
+            printRemoveStudentHelp();
             return;
         }
 
         int id = Integer.parseInt(cmdArr[2]);
         CBL.removeStudent(id);
-        log("Student with id " + Integer.toString(id) +" has been removed");
+        print("Student with id " + Integer.toString(id) +" has been removed");
     }
 
     /**
@@ -176,13 +178,13 @@ public class CLI {
      */
     private void removeTeacher(String[] cmdArr) {
         if (cmdArr.length < 3) {
-            logRemoveTeacherHelp();
+            printRemoveTeacherHelp();
             return;
         }
 
         int id = Integer.parseInt(cmdArr[2]);
         CBL.removeTeacher(id);
-        log("Teacher with id " + Integer.toString(id) +" has been removed");
+        print("Teacher with id " + Integer.toString(id) +" has been removed");
     }
 
     /**
@@ -190,7 +192,7 @@ public class CLI {
      */
     private void payStudent(String[] cmdArr) {
         if (cmdArr.length < 3) {
-            logPayStudentHelp();
+            printPayStudentHelp();
             return;
         }
 
@@ -198,7 +200,7 @@ public class CLI {
         int fee = Integer.parseInt(cmdArr[2]);
 
         CBL.addStudentPaidFee(id, fee);
-        log("Student with id " + Integer.toString(id) + " has paid " + Integer.toString(fee));
+        print("Student with id " + Integer.toString(id) + " has paid " + Integer.toString(fee));
     }
 
     /**
@@ -206,7 +208,7 @@ public class CLI {
      */
     private void setTeacherSalary(String[] cmdArr) {
         if (cmdArr.length < 3) {
-            logSetTeacherSalaryHelp();
+            printSetTeacherSalaryHelp();
             return;
         }
 
@@ -214,7 +216,7 @@ public class CLI {
         int newSalary = Integer.parseInt(cmdArr[2]);
 
         CBL.setTeacherSalary(id, newSalary);
-        log("Teacher with id " + Integer.toString(id) + " 's salary has been set to " + Integer.toString(newSalary));
+        print("Teacher with id " + Integer.toString(id) + " 's salary has been set to " + Integer.toString(newSalary));
     }
 
     /**
@@ -254,10 +256,10 @@ public class CLI {
             fo.close();
         }
         catch (IOException e) {
-            log("File Not Found");
+            print("File Not Found");
         }
 
-        log("Data exported to " + DATA_FILE);
+        print("Data exported to " + DATA_FILE);
     }
 
     /**
@@ -297,7 +299,7 @@ public class CLI {
             CBL.getStudents().add(new Student(id, name, grade, className, fee, paidFee));
         }
 
-        log("Data Imported from " + DATA_FILE);
+        print("Data Imported from " + DATA_FILE);
     }
 
     /**
@@ -319,38 +321,54 @@ public class CLI {
                     students.get(i).getFee(), students.get(i).getPaidFee());
     }
 
-    private void logAddStudentHelp() {
-        log("Syntax: add student <id> <name without spaces> <grade> <className>");
-        log("Syntax: add student <id> <name without spaces> <grade> <className> <paidFee>");
-        log("Syntax: add student <id> <name without spaces> <grade> <className> <fee> <paidFee>");
+    private void printAddStudentHelp() {
+        print("Syntax: " + CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className>");
+        print("Syntax: " + CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className> <paidFee>");
+        print("Syntax: " + CMD_ADD + " " + ARG_STUDENT+ " <id> <name without spaces> <grade> <className> <fee> <paidFee>");
     }
 
-    private void logAddTeacherHelp() {
-        log("Syntax: add teacher <id> <name without spaces> <profession> <salary>");
+    private void printAddTeacherHelp() {
+        print("Syntax: " + CMD_ADD + " " + ARG_TEACHER + " <id> <name without spaces> <profession> <salary>");
     }
 
-    private void logSearchStudentHelp() {
-        log("Syntax: search student <name without spaces>");
+    private void printSearchStudentHelp() {
+        print("Syntax: " + CMD_SEARCH + " " + ARG_STUDENT + " <name without spaces>");
     }
 
-    private void logSearchTeacherHelp() {
-        log("Syntax: search teacher <name without spaces>");
+    private void printSearchTeacherHelp() {
+        print("Syntax: " + CMD_SEARCH + " " + ARG_TEACHER + " <name without spaces>");
     }
 
-    private void logRemoveStudentHelp() {
-        log("Syntax: remove student <id>");
+    private void printRemoveStudentHelp() {
+        print("Syntax: " + CMD_REMOVE + " " + ARG_STUDENT + " <id>");
     }
 
-    private void logRemoveTeacherHelp() {
-        log("Syntax: remove teacher <id>");
+    private void printRemoveTeacherHelp() {
+        print("Syntax: " + CMD_REMOVE + " " + ARG_TEACHER + " <id>");
     }
 
-    private void logPayStudentHelp() {
-        log("Syntax: pay <student id> <money to pay>");
+    private void printPayStudentHelp() {
+        print("Syntax: " + CMD_PAY + " <student id> <money to pay>");
     }
 
-    private void logSetTeacherSalaryHelp() {
-        log("Syntax: setsalary <teacher id> <new salary>");
+    private void printSetTeacherSalaryHelp() {
+        print("Syntax: " + CMD_SET_SALARY + " <teacher id> <new salary>");
+    }
+
+    private void printAllHelp() {
+        print(CMD_HELP);
+        print(CMD_IMPORT);
+        print(CMD_EXPORT);
+        printAddStudentHelp();
+        printAddTeacherHelp();
+        printRemoveStudentHelp();
+        printRemoveTeacherHelp();
+        printSearchStudentHelp();
+        printSearchTeacherHelp();
+        printPayStudentHelp();
+        printSetTeacherSalaryHelp();
+        print(CMD_PRINT_DATA);
+        print(CMD_QUIT);
     }
 
     public static void main(String[] args) {
